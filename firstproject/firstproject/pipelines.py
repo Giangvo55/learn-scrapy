@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-
+import mysql.connector
 
 class FirstprojectPipeline:
     def process_item(self, item, spider):
@@ -63,3 +63,21 @@ class FirstprojectPipeline:
 
 
         return item
+
+class SaveToMySQLPipeLine:
+    def __init__(self):
+        self.conn = mysql.connector.connect(
+            host = 'localhost', 
+            user = 'root',
+            password = '',
+            database = 'books'
+        )
+        self.cur = self.conn.cursor()
+        
+    def process_item(self, item, spider): 
+        #insert data into table
+        return item
+    def close_spider(self, spider): 
+        self.cur.close()
+        self.conn.close()
+        
